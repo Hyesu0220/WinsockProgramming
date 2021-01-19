@@ -67,3 +67,18 @@
 7. 6에서 보낸 int 값 만큼 만큼 보낸다. ( 데이터 송신 )
 8. 연결이 종료된 클라이언트 소켓은 closesocket()으로 완전히 닫아준다.
 9. WSACleanup()으로 WSADATA를 정리한다.
+
+### 3. 스레드
+#### std::thread
+- [Thread Reference](http://www.cplusplus.com/reference/thread/thread/)
+- [Thread Priority 구현 예시](https://stackoverflow.com/questions/18884510/portable-way-of-setting-stdthread-priority-in-c11)
+
+#### std::mutex
+
+#### std::lock
+
+#### std::lock_guard
+
+#### std::unique_lock
+
+#### std::mutex를 이용한 Semaphore
