@@ -99,3 +99,24 @@
 - 접근할 때 Count가 감소시키고 벗어날 떄 Count를 증가시키며 Count가 0일 때는 접근을 차단시킨다.
 - Semaphore 자체도 공유 자원이기 때문에 내부적으로 mutex로 lock과 unlock을 이용하여 구현한다.
 - Semaphore의 동시 접근 가능 프로세스 수가 1인 경우에는 Event와 비슷하다.
+
+----
+### 4. 멀티 스레드 (단순)
+#### Main Thread에서 하는 일
+- WSADATA 초기화
+- listen 소켓 생성
+- 서버의 주소 정보가 담긴 SOCKADDR 준비
+- Listen 소켓과 SOCKADDR 바인드
+- 바인딩 완료된 Listen 소켓을 Listening 상태로 셋팅
+- 접속을 받기위한 Client 소켓과 SOCKADDR을 준비
+- accept()
+- 접속 로그 출력
+- Worker Thread 생성 (접속을 받은 Client 소켓을 Argument로 넘긴다.) 
+- 다시 accept()에 블로킹된다.
+
+#### Worker Thread에서 하는 일
+- Argument를 LPVOID에서 Socket으로 형변환 하여 Client Socket으로 다시 변환한다. (WINAPI의 THREAD일때 방식 현재는 바로 SOCKET 타입으로 받아도 된다.)
+- 수신을 위한 Buffer 준비
+- int(4byte)를 받기 위해 recv 상태에 블로킹 된다. (앞으로 받게될 date의 크기)
+- 위에서 받은 data의 크기만큼 recv()에서 블로킹 된다. (실제 data 받기)
+- 클라이언트 측에서 접속 종료시 closesocket() 호출
