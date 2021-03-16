@@ -89,9 +89,13 @@
 - [Reference](http://www.cplusplus.com/reference/mutex/lock_guard/)
 #### std::unique_lock
 - std::lock_guard와 동일하게 생성시 lock되고 소멸시 unlock되지만 옵션을 통해 생성시 lock을 시키지 않고 원하는 타이밍에 lock 시킬 수 있다.
-
-**Lock 옵션 종류**
-- ***std::defer_lock*** : 기본적으로 lock이 걸리지 않으며 잠금 구조만 생성된다. `lock()` 함수를 호출 될 때 잠금이 된다. 둘 이상의 뮤텍스를 사용하는 상황에서 데드락이 발생 할 수 있습니다.(std::lock을 사용한다면 해결 가능합니다.)
-- ***std::try_to_lock*** : 기본적으로 lock이 걸리지 않으며 잠금 구조만 생성된다. 내부적으로 `try_lock()`을 호출해 소유권을 가져오며 실패하더라도 바로 false를 반환 합니다. `lock.owns_lock()` 등의 코드로 자신이 락을 걸 수 있는 지 확인이 필요하다.
-- ***std::adopt_lock*** : 기본적으로 lock이 걸리지 않으며 잠금 구조만 생성된다. 현재 호출 된 쓰레드가 뮤텍스의 소유권을 가지고 있다고 가정한다. 즉, 사용하려는 mutex 객체가 이미 lock 되어 있는 상태여야 한다. (이미 lock 된 후 unlock을 하지않더라도 unique_lock 으로 생성 해 unlock해줄수 있다.)
+- **Lock 옵션 종류**
+  - ***std::defer_lock*** : 기본적으로 lock이 걸리지 않으며 잠금 구조만 생성된다. `lock()` 함수를 호출 될 때 잠금이 된다. 둘 이상의 뮤텍스를 사용하는 상황에서 데드락이 발생 할 수 있습니다.(std::lock을 사용한다면 해결 가능합니다.)
+  - ***std::try_to_lock*** : 기본적으로 lock이 걸리지 않으며 잠금 구조만 생성된다. 내부적으로 `try_lock()`을 호출해 소유권을 가져오며 실패하더라도 바로 false를 반환 합니다. `lock.owns_lock()` 등의 코드로 자신이 락을 걸 수 있는 지 확인이 필요하다.
+  - ***std::adopt_lock*** : 기본적으로 lock이 걸리지 않으며 잠금 구조만 생성된다. 현재 호출 된 쓰레드가 뮤텍스의 소유권을 가지고 있다고 가정한다. 즉, 사용하려는 mutex 객체가 이미 lock 되어 있는 상태여야 한다. (이미 lock 된 후 unlock을 하지않더라도 unique_lock 으로 생성 해 unlock해줄수 있다.)
 #### std::mutex를 이용한 Semaphore
+- Semaphore는 std에서는 존재하지 않아 따로 구현해주어야한다.
+- Semaphore의 목적은 공유 자원에 정해진 갯수의 프로세스가 접근할 수 있다.
+- 접근할 때 Count가 감소시키고 벗어날 떄 Count를 증가시키며 Count가 0일 때는 접근을 차단시킨다.
+- Semaphore 자체도 공유 자원이기 때문에 내부적으로 mutex로 lock과 unlock을 이용하여 구현한다.
+- Semaphore의 동시 접근 가능 프로세스 수가 1인 경우에는 Event와 비슷하다.
